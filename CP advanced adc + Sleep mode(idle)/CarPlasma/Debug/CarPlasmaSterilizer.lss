@@ -1,0 +1,771 @@
+
+CarPlasmaSterilizer.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000420  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000002  00800060  00000420  000004b4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000014  00800062  00800062  000004b6  2**0
+                  ALLOC
+  3 .debug_aranges 00000068  00000000  00000000  000004b6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 000001cd  00000000  00000000  0000051e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000002e8  00000000  00000000  000006eb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000000d9  00000000  00000000  000009d3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000517  00000000  00000000  00000aac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000b0  00000000  00000000  00000fc4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000025c  00000000  00000000  00001074  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000018  00000000  00000000  000012d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000060  00000000  00000000  000012e8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	10 c0       	rjmp	.+32     	; 0x22 <__ctors_end>
+   2:	28 c0       	rjmp	.+80     	; 0x54 <__bad_interrupt>
+   4:	df c1       	rjmp	.+958    	; 0x3c4 <__vector_2>
+   6:	26 c0       	rjmp	.+76     	; 0x54 <__bad_interrupt>
+   8:	f8 c1       	rjmp	.+1008   	; 0x3fa <__vector_4>
+   a:	24 c0       	rjmp	.+72     	; 0x54 <__bad_interrupt>
+   c:	23 c0       	rjmp	.+70     	; 0x54 <__bad_interrupt>
+   e:	22 c0       	rjmp	.+68     	; 0x54 <__bad_interrupt>
+  10:	21 c0       	rjmp	.+66     	; 0x54 <__bad_interrupt>
+  12:	20 c0       	rjmp	.+64     	; 0x54 <__bad_interrupt>
+  14:	1f c0       	rjmp	.+62     	; 0x54 <__bad_interrupt>
+  16:	e0 c1       	rjmp	.+960    	; 0x3d8 <__vector_11>
+  18:	1d c0       	rjmp	.+58     	; 0x54 <__bad_interrupt>
+  1a:	1c c0       	rjmp	.+56     	; 0x54 <__bad_interrupt>
+  1c:	1b c0       	rjmp	.+54     	; 0x54 <__bad_interrupt>
+  1e:	1a c0       	rjmp	.+52     	; 0x54 <__bad_interrupt>
+  20:	19 c0       	rjmp	.+50     	; 0x54 <__bad_interrupt>
+
+00000022 <__ctors_end>:
+  22:	11 24       	eor	r1, r1
+  24:	1f be       	out	0x3f, r1	; 63
+  26:	cf ed       	ldi	r28, 0xDF	; 223
+  28:	cd bf       	out	0x3d, r28	; 61
+
+0000002a <__do_copy_data>:
+  2a:	10 e0       	ldi	r17, 0x00	; 0
+  2c:	a0 e6       	ldi	r26, 0x60	; 96
+  2e:	b0 e0       	ldi	r27, 0x00	; 0
+  30:	e0 e2       	ldi	r30, 0x20	; 32
+  32:	f4 e0       	ldi	r31, 0x04	; 4
+  34:	02 c0       	rjmp	.+4      	; 0x3a <.do_copy_data_start>
+
+00000036 <.do_copy_data_loop>:
+  36:	05 90       	lpm	r0, Z+
+  38:	0d 92       	st	X+, r0
+
+0000003a <.do_copy_data_start>:
+  3a:	a2 36       	cpi	r26, 0x62	; 98
+  3c:	b1 07       	cpc	r27, r17
+  3e:	d9 f7       	brne	.-10     	; 0x36 <.do_copy_data_loop>
+
+00000040 <__do_clear_bss>:
+  40:	10 e0       	ldi	r17, 0x00	; 0
+  42:	a2 e6       	ldi	r26, 0x62	; 98
+  44:	b0 e0       	ldi	r27, 0x00	; 0
+  46:	01 c0       	rjmp	.+2      	; 0x4a <.do_clear_bss_start>
+
+00000048 <.do_clear_bss_loop>:
+  48:	1d 92       	st	X+, r1
+
+0000004a <.do_clear_bss_start>:
+  4a:	a6 37       	cpi	r26, 0x76	; 118
+  4c:	b1 07       	cpc	r27, r17
+  4e:	e1 f7       	brne	.-8      	; 0x48 <.do_clear_bss_loop>
+  50:	de d1       	rcall	.+956    	; 0x40e <main>
+  52:	e4 c1       	rjmp	.+968    	; 0x41c <_exit>
+
+00000054 <__bad_interrupt>:
+  54:	d5 cf       	rjmp	.-86     	; 0x0 <__vectors>
+
+00000056 <InitSystem>:
+void HandleSystemPower(void);
+
+/*** IMPLEMENTATION(S) ***/
+void InitSystem(void)
+{
+	cli();
+  56:	f8 94       	cli
+
+	DDRB  = (1<<PB0);				//UV_EN=output
+  58:	81 e0       	ldi	r24, 0x01	; 1
+  5a:	87 bb       	out	0x17, r24	; 23
+	PORTB = (1<<PB2) | (0<<PB0);	//UV_EN=off, TOUCH_IN=pull-up
+  5c:	84 e0       	ldi	r24, 0x04	; 4
+  5e:	88 bb       	out	0x18, r24	; 24
+	
+	DDRA  = (1<<PA7) | (1<<PA6) | (1<<PA2) | (1<<PA1) | (1<<PA0); //PLASMA_EN, DC18_EN, REDLED_EN, BLUELED_EN, FAN_EN=output
+  60:	87 ec       	ldi	r24, 0xC7	; 199
+  62:	8a bb       	out	0x1a, r24	; 26
+	PORTA = (0<<PA7) | (0<<PA6) | (0<<PA2) | (0<<PA1) | (0<<PA0); //PLASMA_EN, DC18_EN, REDLED_EN, BLUELED_EN, FAN_EN=off
+  64:	1b ba       	out	0x1b, r1	; 27
+	
+	DIDR0 = (1<<ADC3D);								// ADC3 Digital Input Disable
+  66:	88 e0       	ldi	r24, 0x08	; 8
+  68:	81 b9       	out	0x01, r24	; 1
+	ADMUX =  (1<<MUX1) | (1<<MUX0);		// Reference Vol : 1.1V, ADC3
+  6a:	93 e0       	ldi	r25, 0x03	; 3
+  6c:	97 b9       	out	0x07, r25	; 7
+	ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1);	// ADC Frequency, /64
+  6e:	86 e8       	ldi	r24, 0x86	; 134
+  70:	86 b9       	out	0x06, r24	; 6
+	ADCSRB = (0<<ADLAR);							// left adjusted & Free Running mode
+  72:	13 b8       	out	0x03, r1	; 3
+
+	TCCR0A = (1<<WGM01) | (1<<WGM00);	// OC0x disconnected, fast PWM mode
+  74:	90 bf       	out	0x30, r25	; 48
+	TCCR0B = (1<<CS01);					// CLKtn=CLKio/8 => 1MHz/8=125KHz (8usec)
+  76:	82 e0       	ldi	r24, 0x02	; 2
+  78:	83 bf       	out	0x33, r24	; 51
+	TIMSK0 |= (1<<TOIE0);
+  7a:	89 b7       	in	r24, 0x39	; 57
+  7c:	81 60       	ori	r24, 0x01	; 1
+  7e:	89 bf       	out	0x39, r24	; 57
+	
+	//GIMSK = (1<<PCIE1); // 1= 11 ~ 8 pcmsk1 0 = 7 ~ 0 pcmsk0
+	//PCMSK1 = (1<<PCINT10);	// PCINT2 Enable
+			// PCIE enable
+
+	flag |= FLAG_PWR_bm;
+  80:	80 91 62 00 	lds	r24, 0x0062
+  84:	80 68       	ori	r24, 0x80	; 128
+  86:	80 93 62 00 	sts	0x0062, r24
+	
+	sei();
+  8a:	78 94       	sei
+}
+  8c:	08 95       	ret
+
+0000008e <ReadAdcAndUpdateLed>:
+
+void ReadAdcAndUpdateLed(void)
+{
+	uint16_t value;
+	
+	if(flag & FLAG_PWR_bm) // 
+  8e:	80 91 62 00 	lds	r24, 0x0062
+  92:	87 ff       	sbrs	r24, 7
+  94:	3a c0       	rjmp	.+116    	; 0x10a <__stack+0x2b>
+	{
+		ADCSRA |= (1<<ADSC);				// Start ADC Conversion
+  96:	36 9a       	sbi	0x06, 6	; 6
+		while((ADCSRA & (1<<ADIF)) == 0);	// Wait for completion of ADC
+  98:	34 9b       	sbis	0x06, 4	; 6
+  9a:	fe cf       	rjmp	.-4      	; 0x98 <ReadAdcAndUpdateLed+0xa>
+
+		ADCSRA |= (1<<ADIF);				// Clear ADC Interrupt flag
+  9c:	34 9a       	sbi	0x06, 4	; 6
+
+		value = ADCL;
+  9e:	24 b1       	in	r18, 0x04	; 4
+		value = ((ADCH)<<8)|value; 
+  a0:	45 b1       	in	r20, 0x05	; 5
+		
+		if( PINB & (1<<CHARGER_IN) )
+  a2:	b1 9b       	sbis	0x16, 1	; 22
+  a4:	05 c0       	rjmp	.+10     	; 0xb0 <ReadAdcAndUpdateLed+0x22>
+		{
+			charger_mode = DO_CHARGING;
+  a6:	82 e0       	ldi	r24, 0x02	; 2
+  a8:	80 93 67 00 	sts	0x0067, r24
+			//PORTA  &= ~(1<<BLUELED_EN); // BLUELED Off
+			PORTA  |= (1<<REDLED_EN); // REDLED On
+  ac:	da 9a       	sbi	0x1b, 2	; 27
+  ae:	1b c0       	rjmp	.+54     	; 0xe6 <__stack+0x7>
+		ADCSRA |= (1<<ADSC);				// Start ADC Conversion
+		while((ADCSRA & (1<<ADIF)) == 0);	// Wait for completion of ADC
+
+		ADCSRA |= (1<<ADIF);				// Clear ADC Interrupt flag
+
+		value = ADCL;
+  b0:	30 e0       	ldi	r19, 0x00	; 0
+			flag |= FLAG_PWR_bm;
+
+		}
+		else
+		{
+			if ( value < N_BATLEVEL_3V3 ) // low than 3.3V
+  b2:	94 2f       	mov	r25, r20
+  b4:	80 e0       	ldi	r24, 0x00	; 0
+  b6:	82 2b       	or	r24, r18
+  b8:	93 2b       	or	r25, r19
+  ba:	83 5a       	subi	r24, 0xA3	; 163
+  bc:	92 40       	sbci	r25, 0x02	; 2
+  be:	c8 f4       	brcc	.+50     	; 0xf2 <__stack+0x13>
+			{
+				if(!(flag & FLAG_BIT5_bm)) PORTA &= ~(1<<REDLED_EN); 
+  c0:	80 91 62 00 	lds	r24, 0x0062
+  c4:	85 ff       	sbrs	r24, 5
+  c6:	da 98       	cbi	0x1b, 2	; 27
+				charger_mode = NEED_CHARGING;
+  c8:	81 e0       	ldi	r24, 0x01	; 1
+  ca:	80 93 67 00 	sts	0x0067, r24
+				led_duty = N_LED_DUTY;
+  ce:	80 ea       	ldi	r24, 0xA0	; 160
+  d0:	9f e0       	ldi	r25, 0x0F	; 15
+  d2:	90 93 71 00 	sts	0x0071, r25
+  d6:	80 93 70 00 	sts	0x0070, r24
+				led_period = N_LED_PERIOD;
+  da:	80 e4       	ldi	r24, 0x40	; 64
+  dc:	9f e1       	ldi	r25, 0x1F	; 31
+  de:	90 93 6f 00 	sts	0x006F, r25
+  e2:	80 93 6e 00 	sts	0x006E, r24
+				flag |= FLAG_PWR_bm;
+  e6:	80 91 62 00 	lds	r24, 0x0062
+  ea:	80 68       	ori	r24, 0x80	; 128
+  ec:	80 93 62 00 	sts	0x0062, r24
+  f0:	08 95       	ret
+				
+			}
+			else
+			{
+				charger_mode = NO_CHARGING;
+  f2:	10 92 67 00 	sts	0x0067, r1
+				PORTA  &= ~(1<<REDLED_EN); // REDLED Off
+  f6:	da 98       	cbi	0x1b, 2	; 27
+				flag |= FLAG_PWR_bm;
+  f8:	80 91 62 00 	lds	r24, 0x0062
+  fc:	80 68       	ori	r24, 0x80	; 128
+  fe:	80 93 62 00 	sts	0x0062, r24
+				led_cnt=0;
+ 102:	10 92 73 00 	sts	0x0073, r1
+ 106:	10 92 72 00 	sts	0x0072, r1
+ 10a:	08 95       	ret
+
+0000010c <HandleSystemTick>:
+void HandleSystemTick(void)
+{
+		//1. wake-up check routine
+
+		//2. other timer services
+		if( flag & FLAG_PLASMA_bm )
+ 10c:	80 91 62 00 	lds	r24, 0x0062
+ 110:	84 ff       	sbrs	r24, 4
+ 112:	2e c0       	rjmp	.+92     	; 0x170 <HandleSystemTick+0x64>
+		{
+			switch(sys_mode)
+ 114:	80 91 60 00 	lds	r24, 0x0060
+ 118:	81 30       	cpi	r24, 0x01	; 1
+ 11a:	19 f0       	breq	.+6      	; 0x122 <HandleSystemTick+0x16>
+ 11c:	82 30       	cpi	r24, 0x02	; 2
+ 11e:	41 f5       	brne	.+80     	; 0x170 <HandleSystemTick+0x64>
+ 120:	26 c0       	rjmp	.+76     	; 0x16e <HandleSystemTick+0x62>
+			{
+				//case PLASMA_HI: 
+				case PLASMA_LO: // = PLASMA_LO
+					++plasma_cnt;
+ 122:	80 91 6c 00 	lds	r24, 0x006C
+ 126:	90 91 6d 00 	lds	r25, 0x006D
+ 12a:	01 96       	adiw	r24, 0x01	; 1
+ 12c:	90 93 6d 00 	sts	0x006D, r25
+ 130:	80 93 6c 00 	sts	0x006C, r24
+					
+					if( plasma_duty == plasma_cnt )
+ 134:	20 91 6a 00 	lds	r18, 0x006A
+ 138:	30 91 6b 00 	lds	r19, 0x006B
+ 13c:	80 91 6c 00 	lds	r24, 0x006C
+ 140:	90 91 6d 00 	lds	r25, 0x006D
+ 144:	28 17       	cp	r18, r24
+ 146:	39 07       	cpc	r19, r25
+ 148:	09 f4       	brne	.+2      	; 0x14c <HandleSystemTick+0x40>
+					{
+						PORTA  &= ~(1<<PLASMA_EN); // PLASMA Off	
+ 14a:	df 98       	cbi	0x1b, 7	; 27
+					} 
+					
+					if( plasma_period == plasma_cnt )
+ 14c:	20 91 68 00 	lds	r18, 0x0068
+ 150:	30 91 69 00 	lds	r19, 0x0069
+ 154:	80 91 6c 00 	lds	r24, 0x006C
+ 158:	90 91 6d 00 	lds	r25, 0x006D
+ 15c:	28 17       	cp	r18, r24
+ 15e:	39 07       	cpc	r19, r25
+ 160:	39 f4       	brne	.+14     	; 0x170 <HandleSystemTick+0x64>
+					{
+						PORTA  |= (1<<PLASMA_EN); // PLASMA On
+ 162:	df 9a       	sbi	0x1b, 7	; 27
+						plasma_cnt = 0;
+ 164:	10 92 6d 00 	sts	0x006D, r1
+ 168:	10 92 6c 00 	sts	0x006C, r1
+ 16c:	01 c0       	rjmp	.+2      	; 0x170 <HandleSystemTick+0x64>
+					}
+					break;
+				case SLEEP: PORTA  |= (1<<REDLED_EN);
+ 16e:	da 9a       	sbi	0x1b, 2	; 27
+					*/	
+			}
+		}
+				
+		//3. other timer services`
+		if(flag & FLAG_BIT5_bm)
+ 170:	80 91 62 00 	lds	r24, 0x0062
+ 174:	85 ff       	sbrs	r24, 5
+ 176:	32 c0       	rjmp	.+100    	; 0x1dc <HandleSystemTick+0xd0>
+		{
+			switch(charger_mode)
+ 178:	80 91 67 00 	lds	r24, 0x0067
+ 17c:	81 30       	cpi	r24, 0x01	; 1
+ 17e:	39 f0       	breq	.+14     	; 0x18e <HandleSystemTick+0x82>
+ 180:	81 30       	cpi	r24, 0x01	; 1
+ 182:	18 f0       	brcs	.+6      	; 0x18a <HandleSystemTick+0x7e>
+ 184:	82 30       	cpi	r24, 0x02	; 2
+ 186:	51 f5       	brne	.+84     	; 0x1dc <HandleSystemTick+0xd0>
+ 188:	28 c0       	rjmp	.+80     	; 0x1da <HandleSystemTick+0xce>
+			{
+				case NO_CHARGING:
+				PORTA &= ~(1<<REDLED_EN);
+ 18a:	da 98       	cbi	0x1b, 2	; 27
+ 18c:	27 c0       	rjmp	.+78     	; 0x1dc <HandleSystemTick+0xd0>
+				break;
+				case NEED_CHARGING:
+				++led_cnt;
+ 18e:	80 91 72 00 	lds	r24, 0x0072
+ 192:	90 91 73 00 	lds	r25, 0x0073
+ 196:	01 96       	adiw	r24, 0x01	; 1
+ 198:	90 93 73 00 	sts	0x0073, r25
+ 19c:	80 93 72 00 	sts	0x0072, r24
+				if(led_duty == led_cnt)
+ 1a0:	20 91 70 00 	lds	r18, 0x0070
+ 1a4:	30 91 71 00 	lds	r19, 0x0071
+ 1a8:	80 91 72 00 	lds	r24, 0x0072
+ 1ac:	90 91 73 00 	lds	r25, 0x0073
+ 1b0:	28 17       	cp	r18, r24
+ 1b2:	39 07       	cpc	r19, r25
+ 1b4:	09 f4       	brne	.+2      	; 0x1b8 <HandleSystemTick+0xac>
+				{
+					PORTA &= ~(1<<REDLED_EN);
+ 1b6:	da 98       	cbi	0x1b, 2	; 27
+				}
+				if( led_period == led_cnt )
+ 1b8:	20 91 6e 00 	lds	r18, 0x006E
+ 1bc:	30 91 6f 00 	lds	r19, 0x006F
+ 1c0:	80 91 72 00 	lds	r24, 0x0072
+ 1c4:	90 91 73 00 	lds	r25, 0x0073
+ 1c8:	28 17       	cp	r18, r24
+ 1ca:	39 07       	cpc	r19, r25
+ 1cc:	39 f4       	brne	.+14     	; 0x1dc <HandleSystemTick+0xd0>
+				{
+					PORTA  |= (1<<REDLED_EN); // REDLED On
+ 1ce:	da 9a       	sbi	0x1b, 2	; 27
+					led_cnt = 0;
+ 1d0:	10 92 73 00 	sts	0x0073, r1
+ 1d4:	10 92 72 00 	sts	0x0072, r1
+ 1d8:	01 c0       	rjmp	.+2      	; 0x1dc <HandleSystemTick+0xd0>
+				}
+				break;
+				case DO_CHARGING:
+				PORTA |= (1<<REDLED_EN);
+ 1da:	da 9a       	sbi	0x1b, 2	; 27
+				break;					
+			}
+		}
+		
+		//4. touch key status check
+		flag |= FLAG_CHECK_TOUCHKEY_bm; //
+ 1dc:	80 91 62 00 	lds	r24, 0x0062
+ 1e0:	82 60       	ori	r24, 0x02	; 2
+ 1e2:	80 93 62 00 	sts	0x0062, r24
+	
+}
+ 1e6:	08 95       	ret
+
+000001e8 <HandleTouchKeyInput>:
+
+void HandleTouchKeyInput(void)
+{
+	if( flag & FLAG_CHECK_TOUCHKEY_bm )
+ 1e8:	80 91 62 00 	lds	r24, 0x0062
+ 1ec:	81 ff       	sbrs	r24, 1
+ 1ee:	a2 c0       	rjmp	.+324    	; 0x334 <HandleTouchKeyInput+0x14c>
+	{
+		flag &= ~FLAG_CHECK_TOUCHKEY_bm;
+ 1f0:	80 91 62 00 	lds	r24, 0x0062
+ 1f4:	8d 7f       	andi	r24, 0xFD	; 253
+ 1f6:	80 93 62 00 	sts	0x0062, r24
+		
+		touch_curr = PINB & (1<<TOUCH_IN);
+ 1fa:	86 b3       	in	r24, 0x16	; 22
+ 1fc:	84 70       	andi	r24, 0x04	; 4
+ 1fe:	80 93 66 00 	sts	0x0066, r24
+			if(touch_curr == touch_prev)
+ 202:	90 91 66 00 	lds	r25, 0x0066
+ 206:	80 91 65 00 	lds	r24, 0x0065
+ 20a:	98 17       	cp	r25, r24
+ 20c:	09 f0       	breq	.+2      	; 0x210 <HandleTouchKeyInput+0x28>
+ 20e:	88 c0       	rjmp	.+272    	; 0x320 <HandleTouchKeyInput+0x138>
+			{
+					if(++touch_chat > N_CHAT_THRESH )
+ 210:	80 91 64 00 	lds	r24, 0x0064
+ 214:	8f 5f       	subi	r24, 0xFF	; 255
+ 216:	80 93 64 00 	sts	0x0064, r24
+ 21a:	80 91 64 00 	lds	r24, 0x0064
+ 21e:	81 32       	cpi	r24, 0x21	; 33
+ 220:	08 f4       	brcc	.+2      	; 0x224 <HandleTouchKeyInput+0x3c>
+ 222:	88 c0       	rjmp	.+272    	; 0x334 <HandleTouchKeyInput+0x14c>
+					{
+						touch_chat = 0;
+ 224:	10 92 64 00 	sts	0x0064, r1
+				
+						if( !(touch_prev & (1<<TOUCH_IN)) )
+ 228:	80 91 65 00 	lds	r24, 0x0065
+ 22c:	82 fd       	sbrc	r24, 2
+ 22e:	6e c0       	rjmp	.+220    	; 0x30c <HandleTouchKeyInput+0x124>
+						{
+							if( !(flag & FLAG_KEYLOCK_bm) )
+ 230:	80 91 62 00 	lds	r24, 0x0062
+ 234:	82 fd       	sbrc	r24, 2
+ 236:	7e c0       	rjmp	.+252    	; 0x334 <HandleTouchKeyInput+0x14c>
+							{
+								if(++power_touch_chat > N_POWER_ONOFF)
+ 238:	80 91 74 00 	lds	r24, 0x0074
+ 23c:	90 91 75 00 	lds	r25, 0x0075
+ 240:	01 96       	adiw	r24, 0x01	; 1
+ 242:	90 93 75 00 	sts	0x0075, r25
+ 246:	80 93 74 00 	sts	0x0074, r24
+ 24a:	80 91 74 00 	lds	r24, 0x0074
+ 24e:	90 91 75 00 	lds	r25, 0x0075
+ 252:	85 36       	cpi	r24, 0x65	; 101
+ 254:	91 05       	cpc	r25, r1
+ 256:	0c f4       	brge	.+2      	; 0x25a <HandleTouchKeyInput+0x72>
+ 258:	6d c0       	rjmp	.+218    	; 0x334 <HandleTouchKeyInput+0x14c>
+								{
+									flag |= FLAG_KEYLOCK_bm;
+ 25a:	80 91 62 00 	lds	r24, 0x0062
+ 25e:	84 60       	ori	r24, 0x04	; 4
+ 260:	80 93 62 00 	sts	0x0062, r24
+									tim_base = 0; // clear sleep-timer while key is pressed.
+ 264:	10 92 63 00 	sts	0x0063, r1
+						
+									if( ++sys_mode > SLEEP ) sys_mode = PLASMA_LO;
+ 268:	80 91 60 00 	lds	r24, 0x0060
+ 26c:	8f 5f       	subi	r24, 0xFF	; 255
+ 26e:	80 93 60 00 	sts	0x0060, r24
+ 272:	80 91 60 00 	lds	r24, 0x0060
+ 276:	83 30       	cpi	r24, 0x03	; 3
+ 278:	18 f0       	brcs	.+6      	; 0x280 <HandleTouchKeyInput+0x98>
+ 27a:	81 e0       	ldi	r24, 0x01	; 1
+ 27c:	80 93 60 00 	sts	0x0060, r24
+									switch(sys_mode)
+ 280:	80 91 60 00 	lds	r24, 0x0060
+ 284:	81 30       	cpi	r24, 0x01	; 1
+ 286:	61 f0       	breq	.+24     	; 0x2a0 <HandleTouchKeyInput+0xb8>
+ 288:	81 30       	cpi	r24, 0x01	; 1
+ 28a:	20 f0       	brcs	.+8      	; 0x294 <HandleTouchKeyInput+0xac>
+ 28c:	82 30       	cpi	r24, 0x02	; 2
+ 28e:	09 f0       	breq	.+2      	; 0x292 <HandleTouchKeyInput+0xaa>
+ 290:	51 c0       	rjmp	.+162    	; 0x334 <HandleTouchKeyInput+0x14c>
+ 292:	19 c0       	rjmp	.+50     	; 0x2c6 <HandleTouchKeyInput+0xde>
+									{
+										case NOMAL:
+										flag |= FLAG_PWR_bm; // 1
+ 294:	80 91 62 00 	lds	r24, 0x0062
+ 298:	80 68       	ori	r24, 0x80	; 128
+ 29a:	80 93 62 00 	sts	0x0062, r24
+ 29e:	30 c0       	rjmp	.+96     	; 0x300 <HandleTouchKeyInput+0x118>
+										flag |= FLAG_PWR_EVENT_bm; 
+										break;
+							
+										case PLASMA_LO:
+										flag |= FLAG_PWR_bm; 
+ 2a0:	80 91 62 00 	lds	r24, 0x0062
+ 2a4:	80 68       	ori	r24, 0x80	; 128
+ 2a6:	80 93 62 00 	sts	0x0062, r24
+										flag |= FLAG_PWR_EVENT_bm; 
+ 2aa:	80 91 62 00 	lds	r24, 0x0062
+ 2ae:	80 64       	ori	r24, 0x40	; 64
+ 2b0:	80 93 62 00 	sts	0x0062, r24
+										flag |= FLAG_PLASMA_bm;
+ 2b4:	80 91 62 00 	lds	r24, 0x0062
+ 2b8:	80 61       	ori	r24, 0x10	; 16
+ 2ba:	80 93 62 00 	sts	0x0062, r24
+										flag |= FLAG_PLASMA_EVENT_bm;
+ 2be:	80 91 62 00 	lds	r24, 0x0062
+ 2c2:	88 60       	ori	r24, 0x08	; 8
+ 2c4:	20 c0       	rjmp	.+64     	; 0x306 <HandleTouchKeyInput+0x11e>
+										flag |= FLAG_PLASMA_bm;
+										flag |= FLAG_PLASMA_EVENT_bm;
+										break;
+										*/
+										case SLEEP:
+										PORTA  &= ~(1<<FAN_EN); // FAN Off
+ 2c6:	d8 98       	cbi	0x1b, 0	; 27
+										PORTA  &= ~(1<<DC18_EN); // DC18 Off
+ 2c8:	de 98       	cbi	0x1b, 6	; 27
+										PORTA  &= ~(1<<PLASMA_EN); // PLASMA Off
+ 2ca:	df 98       	cbi	0x1b, 7	; 27
+										PORTA  &= ~(1<<BLUELED_EN); // BLUELED Off
+ 2cc:	d9 98       	cbi	0x1b, 1	; 27
+										PORTB  &= ~(1<<UV_EN); // UV Off
+ 2ce:	c0 98       	cbi	0x18, 0	; 24
+										//PORTA  &= ~(1<<REDLED_EN);
+								
+										flag |= FLAG_PLASMA_EVENT_bm;
+ 2d0:	80 91 62 00 	lds	r24, 0x0062
+ 2d4:	88 60       	ori	r24, 0x08	; 8
+ 2d6:	80 93 62 00 	sts	0x0062, r24
+										flag &= ~FLAG_PWR_bm;
+ 2da:	80 91 62 00 	lds	r24, 0x0062
+ 2de:	8f 77       	andi	r24, 0x7F	; 127
+ 2e0:	80 93 62 00 	sts	0x0062, r24
+										flag &= ~FLAG_BIT5_bm;
+ 2e4:	80 91 62 00 	lds	r24, 0x0062
+ 2e8:	8f 7d       	andi	r24, 0xDF	; 223
+ 2ea:	80 93 62 00 	sts	0x0062, r24
+										flag &= ~FLAG_PLASMA_bm;
+ 2ee:	80 91 62 00 	lds	r24, 0x0062
+ 2f2:	8f 7e       	andi	r24, 0xEF	; 239
+ 2f4:	80 93 62 00 	sts	0x0062, r24
+										plasma_cnt	=	0;
+ 2f8:	10 92 6d 00 	sts	0x006D, r1
+ 2fc:	10 92 6c 00 	sts	0x006C, r1
+										flag |= FLAG_PWR_EVENT_bm;
+ 300:	80 91 62 00 	lds	r24, 0x0062
+ 304:	80 64       	ori	r24, 0x40	; 64
+ 306:	80 93 62 00 	sts	0x0062, r24
+ 30a:	08 95       	ret
+								}
+							}
+						}
+						else
+						{
+							flag &= ~(FLAG_KEYLOCK_bm);
+ 30c:	80 91 62 00 	lds	r24, 0x0062
+ 310:	8b 7f       	andi	r24, 0xFB	; 251
+ 312:	80 93 62 00 	sts	0x0062, r24
+							power_touch_chat = 0;
+ 316:	10 92 75 00 	sts	0x0075, r1
+ 31a:	10 92 74 00 	sts	0x0074, r1
+ 31e:	08 95       	ret
+						}
+					}
+			}
+			else
+			{
+				touch_prev = touch_curr;
+ 320:	80 91 66 00 	lds	r24, 0x0066
+ 324:	80 93 65 00 	sts	0x0065, r24
+				touch_chat = 0;
+ 328:	10 92 64 00 	sts	0x0064, r1
+				power_touch_chat = 0;
+ 32c:	10 92 75 00 	sts	0x0075, r1
+ 330:	10 92 74 00 	sts	0x0074, r1
+ 334:	08 95       	ret
+
+00000336 <HandleSystemPower>:
+	}
+}
+
+void HandleSystemPower(void)
+{
+	if(!(flag & FLAG_PWR_EVENT_bm)) 
+ 336:	80 91 62 00 	lds	r24, 0x0062
+ 33a:	86 ff       	sbrs	r24, 6
+ 33c:	19 c0       	rjmp	.+50     	; 0x370 <HandleSystemPower+0x3a>
+		return;
+	else // flag pwr event bm == 1
+		flag &= ~FLAG_PWR_EVENT_bm;
+ 33e:	80 91 62 00 	lds	r24, 0x0062
+ 342:	8f 7b       	andi	r24, 0xBF	; 191
+ 344:	80 93 62 00 	sts	0x0062, r24
+	
+	if( flag & FLAG_PWR_bm ) //flag pwr bm == 1
+ 348:	80 91 62 00 	lds	r24, 0x0062
+ 34c:	87 ff       	sbrs	r24, 7
+ 34e:	03 c0       	rjmp	.+6      	; 0x356 <HandleSystemPower+0x20>
+	{//Power on sequence
+		PORTA  |= (1<<FAN_EN); // FAN On
+ 350:	d8 9a       	sbi	0x1b, 0	; 27
+		PORTB  |= (1<<UV_EN); // UV On
+ 352:	c0 9a       	sbi	0x18, 0	; 24
+ 354:	08 95       	ret
+// 		PORTA  &= ~(1<<BLUELED_EN); // BLUELED Off
+// 		//PORTA  &= ~(1<<REDLED_EN); // REDLED Off
+// 		PORTB  &= ~(1<<UV_EN); // UV Off
+// 
+// 		//0. 인터럽트 disable
+		cli();
+ 356:	f8 94       	cli
+// 		WDTCSR |= (1<<WDIE) | (1<<WDE) | (1<<WDP2) | (1<<WDP1); //~1.0s
+// 		*/
+		
+		
+		//3. 인터럽트 enable & 슬립실행
+		sei();
+ 358:	78 94       	sei
+ 		set_sleep_mode(SLEEP_MODE_IDLE);
+ 35a:	85 b7       	in	r24, 0x35	; 53
+ 35c:	87 7e       	andi	r24, 0xE7	; 231
+ 35e:	85 bf       	out	0x35, r24	; 53
+		sleep_mode();
+ 360:	85 b7       	in	r24, 0x35	; 53
+ 362:	80 62       	ori	r24, 0x20	; 32
+ 364:	85 bf       	out	0x35, r24	; 53
+ 366:	88 95       	sleep
+ 368:	85 b7       	in	r24, 0x35	; 53
+ 36a:	8f 7d       	andi	r24, 0xDF	; 223
+ 36c:	85 bf       	out	0x35, r24	; 53
+		
+		//sleep_disable();
+		//4. 인터럽트 disable & Watchdog off
+		cli();
+ 36e:	f8 94       	cli
+ 370:	08 95       	ret
+
+00000372 <HandlePlasmaMode>:
+	
+}
+
+void HandlePlasmaMode(void)
+{
+	if( !(flag & FLAG_PLASMA_EVENT_bm) )
+ 372:	80 91 62 00 	lds	r24, 0x0062
+ 376:	83 ff       	sbrs	r24, 3
+ 378:	24 c0       	rjmp	.+72     	; 0x3c2 <HandlePlasmaMode+0x50>
+		return;
+	else
+		flag &= ~FLAG_PLASMA_EVENT_bm;
+ 37a:	80 91 62 00 	lds	r24, 0x0062
+ 37e:	87 7f       	andi	r24, 0xF7	; 247
+ 380:	80 93 62 00 	sts	0x0062, r24
+		
+	switch(sys_mode)
+ 384:	80 91 60 00 	lds	r24, 0x0060
+ 388:	81 30       	cpi	r24, 0x01	; 1
+ 38a:	d9 f4       	brne	.+54     	; 0x3c2 <HandlePlasmaMode+0x50>
+	{
+		case PLASMA_LO:
+			PORTA  |= (1<<DC18_EN); // DC18 On
+ 38c:	de 9a       	sbi	0x1b, 6	; 27
+			PORTA  |= (1<<PLASMA_EN); // PLASMA On
+ 38e:	df 9a       	sbi	0x1b, 7	; 27
+			flag |= FLAG_PLASMA_bm;
+ 390:	80 91 62 00 	lds	r24, 0x0062
+ 394:	80 61       	ori	r24, 0x10	; 16
+ 396:	80 93 62 00 	sts	0x0062, r24
+			PORTA |= (1<<BLUELED_EN) | (1<<FAN_EN); //BLUE LED + FAN ON
+ 39a:	8b b3       	in	r24, 0x1b	; 27
+ 39c:	83 60       	ori	r24, 0x03	; 3
+ 39e:	8b bb       	out	0x1b, r24	; 27
+			PORTB |= (1<<UV_EN); //UV ON
+ 3a0:	c0 9a       	sbi	0x18, 0	; 24
+			plasma_cnt	=	0;
+ 3a2:	10 92 6d 00 	sts	0x006D, r1
+ 3a6:	10 92 6c 00 	sts	0x006C, r1
+			plasma_duty	=	N_PLASMA_LO_DUTY;
+ 3aa:	88 ec       	ldi	r24, 0xC8	; 200
+ 3ac:	90 e0       	ldi	r25, 0x00	; 0
+ 3ae:	90 93 6b 00 	sts	0x006B, r25
+ 3b2:	80 93 6a 00 	sts	0x006A, r24
+			plasma_period	=	N_PLASMA_LO_PERIOD;
+ 3b6:	80 e4       	ldi	r24, 0x40	; 64
+ 3b8:	9f e1       	ldi	r25, 0x1F	; 31
+ 3ba:	90 93 69 00 	sts	0x0069, r25
+ 3be:	80 93 68 00 	sts	0x0068, r24
+ 3c2:	08 95       	ret
+
+000003c4 <__vector_2>:
+	
+}
+
+
+ISR(PCINT0_vect)
+{
+ 3c4:	1f 92       	push	r1
+ 3c6:	0f 92       	push	r0
+ 3c8:	0f b6       	in	r0, 0x3f	; 63
+ 3ca:	0f 92       	push	r0
+ 3cc:	11 24       	eor	r1, r1
+	//PORTB ^= (1<<PB3); //debug code, remove me
+}
+ 3ce:	0f 90       	pop	r0
+ 3d0:	0f be       	out	0x3f, r0	; 63
+ 3d2:	0f 90       	pop	r0
+ 3d4:	1f 90       	pop	r1
+ 3d6:	18 95       	reti
+
+000003d8 <__vector_11>:
+
+
+
+ISR(TIM0_OVF_vect)
+{
+ 3d8:	1f 92       	push	r1
+ 3da:	0f 92       	push	r0
+ 3dc:	0f b6       	in	r0, 0x3f	; 63
+ 3de:	0f 92       	push	r0
+ 3e0:	11 24       	eor	r1, r1
+ 3e2:	8f 93       	push	r24
+	//PORTB ^= (1<<PB3); //debug code, remove me
+	flag |= FLAG_SYSTICK_bm; //2ms tick 
+ 3e4:	80 91 62 00 	lds	r24, 0x0062
+ 3e8:	81 60       	ori	r24, 0x01	; 1
+ 3ea:	80 93 62 00 	sts	0x0062, r24
+}
+ 3ee:	8f 91       	pop	r24
+ 3f0:	0f 90       	pop	r0
+ 3f2:	0f be       	out	0x3f, r0	; 63
+ 3f4:	0f 90       	pop	r0
+ 3f6:	1f 90       	pop	r1
+ 3f8:	18 95       	reti
+
+000003fa <__vector_4>:
+
+
+
+ISR(WDT_vect)
+{
+ 3fa:	1f 92       	push	r1
+ 3fc:	0f 92       	push	r0
+ 3fe:	0f b6       	in	r0, 0x3f	; 63
+ 400:	0f 92       	push	r0
+ 402:	11 24       	eor	r1, r1
+	//PORTB ^= (1<<PB3); //debug code, remove me
+	//PORTB &= ~(1<<PB3); //debug code, remove me
+}
+ 404:	0f 90       	pop	r0
+ 406:	0f be       	out	0x3f, r0	; 63
+ 408:	0f 90       	pop	r0
+ 40a:	1f 90       	pop	r1
+ 40c:	18 95       	reti
+
+0000040e <main>:
+
+
+
+int main(void)
+{
+	InitSystem();
+ 40e:	23 de       	rcall	.-954    	; 0x56 <InitSystem>
+	
+	while(1)
+	{
+		HandleTouchKeyInput();
+ 410:	eb de       	rcall	.-554    	; 0x1e8 <HandleTouchKeyInput>
+		ReadAdcAndUpdateLed();
+ 412:	3d de       	rcall	.-902    	; 0x8e <ReadAdcAndUpdateLed>
+		HandleSystemTick();
+ 414:	7b de       	rcall	.-778    	; 0x10c <HandleSystemTick>
+		HandleSystemPower();
+ 416:	8f df       	rcall	.-226    	; 0x336 <HandleSystemPower>
+		HandlePlasmaMode();
+ 418:	ac df       	rcall	.-168    	; 0x372 <HandlePlasmaMode>
+ 41a:	fa cf       	rjmp	.-12     	; 0x410 <main+0x2>
+
+0000041c <_exit>:
+ 41c:	f8 94       	cli
+
+0000041e <__stop_program>:
+ 41e:	ff cf       	rjmp	.-2      	; 0x41e <__stop_program>
